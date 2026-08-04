@@ -1,0 +1,861 @@
+/* 1. reset e config base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Define a proporcao de ecrã panorâmica do contentor principal do jogo */
+.fnaf-container {
+  position: relative;
+  width: 100vw;
+  height: 56.25vw;
+  max-width: 1920px;
+  max-height: 1080px;
+  background-color: #050505;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+}
+
+/* Alinha e centraliza verticalmente os conteudos internos */
+.center-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+}
+
+/* Estilos do menu inicial */
+.menu-titulo {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 64px;
+  color: #ff3333;
+  text-shadow: 0 0 15px rgba(255, 50, 50, 0.6);
+  margin-bottom: 50px;
+  letter-spacing: 3px;
+  line-height: 1.2;
+}
+
+.menu-botoes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.btn-menu {
+  display: block;
+  width: 280px;
+  padding: 15px;
+  background: rgba(20, 20, 20, 0.8);
+  border: 2px solid #ff3333;
+  color: #ff3333;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn-menu:hover {
+  background: #ff3333;
+  color: #000;
+  box-shadow: 0 0 20px #ff3333;
+  transform: scale(1.05);
+}
+
+.btn-menu.verde {
+  border-color: #00ff78;
+  color: #00ff78;
+}
+
+.btn-menu.verde:hover {
+  background: #00ff78;
+  color: #000;
+  box-shadow: 0 0 20px #00ff78;
+}
+
+/* Estilos do gabinete */
+.sub-ecran {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+#cenario-gabinete {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  z-index: 1;
+}
+
+.hud-topo {
+  position: absolute;
+  top: 80px;
+  right: 30px;
+  z-index: 40;
+  color: #fff;
+  font-size: 24px;
+  text-align: right;
+  text-shadow: 2px 2px 4px #000;
+  font-family: monospace;
+}
+
+.controlos {
+  position: absolute;
+  top: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 5;
+}
+
+.painel-esquerdo {
+  left: 5%;
+}
+.painel-direito {
+  right: 5%;
+}
+
+.controlos button {
+  width: 80px;
+  height: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid #555;
+  background-color: #222;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.btn-luz:hover {
+  background-color: #cc0;
+  color: #000;
+}
+
+.btn-porta.trancado {
+  background-color: #ff0000;
+  color: #fff;
+  border-color: #900;
+  box-shadow: 0 0 10px #f00;
+}
+
+/* Estilos para botões desativados (falta de energia) */
+.btn-porta.desativado,
+.btn-luz.desativado {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Define o layout do controlo de abertura do monitor */
+.aba-monitor-grande {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 450px;
+  height: 65px;
+  background: rgba(10, 10, 15, 0.95);
+  border: 3px solid #00ff78;
+  color: #00ff78;
+  font-size: 18px;
+  font-weight: bold;
+  font-family: "Courier New", Courier, monospace;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  z-index: 20;
+  border-radius: 6px;
+  box-shadow: 0 0 15px rgba(0, 255, 120, 0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+.aba-monitor-grande:hover {
+  background: #00ff78;
+  color: #000;
+  box-shadow: 0 0 25px #00ff78;
+  transform: translateX(-50%) scale(1.03);
+}
+
+/* Estilos para monitor de camaras */
+#vista-monitor {
+  background-color: #050505;
+  display: flex;
+  padding: 40px;
+  gap: 20px;
+}
+
+.ecran-camara-atual {
+  flex: 1.2;
+  position: relative;
+  border: 4px solid #222;
+  overflow: hidden;
+}
+
+/* Configura a proporcao ampliada para a panorâmica deslizante */
+#imagem-monitor {
+  width: 130% !important;
+  height: 100% !important;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  left: 0;
+  animation: movimentoCamara 8s ease-in-out infinite;
+}
+
+.id-camara-texto {
+  position: absolute;
+  top: 40px;
+  left: 15px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #00ff78;
+  padding: 6px 12px;
+  font-family: monospace;
+  border: 1px solid #00ff78;
+  z-index: 25;
+}
+
+.contentor-mapa-direito {
+  flex: 0.8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(10, 10, 15, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  position: relative;
+  padding-bottom: 40px;
+}
+
+.mapa-wrapper {
+  position: relative;
+  width: 90%;
+}
+
+.img-mapa-linhas {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.35;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
+}
+
+/* Posiciona e estiliza os seletores de camaras do mapa */
+.btn-cam-mapa {
+  position: absolute;
+  background: #111;
+  color: #fff;
+  border: 1px solid #666;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 6px 10px;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  white-space: nowrap;
+  width: auto;
+}
+
+.btn-cam-mapa:hover {
+  background: #00ff78;
+  color: #000;
+}
+
+.cam-topo {
+  top: 11%;
+  left: 31%;
+}
+.cam-sala-grande-sup {
+  top: 22%;
+  left: 93%;
+}
+.cam-sala-grande-inf {
+  top: 52%;
+  left: 39%;
+}
+.cam-sala-esquerda {
+  top: 52%;
+  left: 13%;
+}
+.cam-corredor-esquerdo {
+  top: 97%;
+  left: 31%;
+}
+.cam-cozinha {
+  top: 86%;
+  left: 49%;
+}
+.cam-corredor-direito {
+  top: 97%;
+  left: 66%;
+}
+.cam-sala-direita {
+  top: 62%;
+  left: 95%;
+}
+
+/* Define o layout do controlo de fecho do monitor */
+.fechar-camaras {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 450px;
+  height: 65px;
+  background: rgba(20, 5, 5, 0.95);
+  border: 3px solid #ff3333;
+  color: #ff3333;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Courier New", Courier, monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  z-index: 30;
+  border-radius: 6px;
+  box-shadow: 0 0 15px rgba(255, 50, 50, 0.2);
+  transition: all 0.2s ease-in-out;
+}
+
+.fechar-camaras:hover {
+  background: #ff3333;
+  color: #fff;
+  box-shadow: 0 0 25px #ff3333;
+  transform: translateX(-50%) scale(1.03);
+}
+
+/* Estilos para Lore, Terminal e Login */
+.terminal-ecran {
+  background: #000;
+  color: #00ff78;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.bloco-conteudo-centrado {
+  max-width: 750px;
+  text-align: center;
+}
+
+.terminal-texto {
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.censurado {
+  background: #000;
+  color: #000;
+  border-bottom: 15px solid #fff;
+}
+
+.input-terminal {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #00ff78;
+  color: #00ff78;
+  font-family: monospace;
+  font-size: 20px;
+  outline: none;
+  width: 320px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Estilos para finais (Game Over / vitória) */
+.jumpscare-bg {
+  background: #050000;
+}
+
+/* Define a aparencia e animacao das pistas coletaveis */
+.objeto-cenario {
+  position: absolute;
+  background: rgba(0, 255, 120, 0.2);
+  border: 1px dashed #00ff78;
+  color: #00ff78;
+  font-family: monospace;
+  font-size: 10px;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 3px;
+  z-index: 15;
+  text-shadow: 0 0 5px #000;
+  transition: background 0.2s;
+  animation: movimentoCamara 8s ease-in-out infinite;
+}
+
+.objeto-cenario:hover {
+  background: rgba(0, 255, 120, 0.8);
+  color: #000;
+  box-shadow: 0 0 10px #00ff78;
+}
+
+/* Estática e ruido de tv */
+.feed-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Renderiza as linhas de digitalizacao e o gradiente de ruido */
+.estatica-efeito {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.06),
+      rgba(0, 255, 0, 0.02),
+      rgba(0, 0, 255, 0.06)
+    );
+  background-size:
+    100% 4px,
+    6px 100%;
+  animation: ruido 0.15s infinite;
+  opacity: 0.85;
+}
+
+/* Alterna de forma caotica o preenchimento de fundo da estatica */
+@keyframes ruido {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 5px 10px;
+  }
+  100% {
+    background-position: -5px -10px;
+  }
+}
+
+/* Coordena a oscilacao panorâmica horizontal do feed das cameras */
+@keyframes movimentoCamara {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-23%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Aplica destaque neon visual ao botao da camara ativa */
+.btn-cam-mapa.ativa {
+  background: #00ff78 !important;
+  color: #000000 !important;
+  border-color: #ffffff !important;
+  box-shadow:
+    0 0 15px #00ff78,
+    0 0 5px #ffffff;
+  font-weight: bold;
+}
+
+/* Força o posicionamento flutuante do controlo de saida */
+.btn-voltar-menu {
+  position: fixed;
+  top: 20px;
+  left: 25px;
+  z-index: 9999;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  width: 200px !important;
+  min-width: 200px !important;
+  max-width: 200px !important;
+  height: 55px !important;
+  text-indent: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: rgba(30, 0, 0, 0.7);
+  color: #ff3333;
+  border: 2px solid #ff3333;
+  font-family: monospace;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-voltar-menu:hover {
+  background-color: #ff3333;
+  color: #000;
+  box-shadow: 0 0 10px #ff3333;
+}
+
+/* Ecrã doo contrato e termo de aceitação */
+.contentor-contrato {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+  font-family: "Courier New", Courier, monospace;
+  box-sizing: border-box;
+}
+
+.contrato-texto-bloco {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 35px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.contrato-titulo-neon {
+  color: #00ff78;
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(0, 255, 120, 0.3);
+}
+
+.contrato-paragrafo {
+  color: #00ff78;
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+}
+
+.contrato-assinatura-bloco {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 540px;
+  box-sizing: border-box;
+  margin-bottom: 35px;
+}
+
+.contrato-checkbox-painel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+  background-color: rgba(10, 10, 10, 0.8);
+  padding: 15px;
+  border-radius: 4px;
+  border: 1px solid #00ff78;
+  box-shadow: 0 0 10px rgba(0, 255, 120, 0.05);
+  width: 100%;
+}
+
+.contrato-chk {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #00ff78;
+  flex-shrink: 0;
+}
+
+.contrato-chk-label {
+  font-weight: bold;
+  color: #00ff78;
+  cursor: pointer;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.contrato-canvas-zona {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.contrato-subtitulo {
+  font-weight: bold;
+  color: #00ff78;
+  margin-bottom: 12px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px rgba(0, 255, 120, 0.2);
+}
+
+#telaAssinatura {
+  border: 2px dashed #00ff78;
+  background-color: rgba(10, 10, 10, 0.95);
+  cursor: crosshair;
+  border-radius: 4px;
+  box-shadow: 0 0 15px rgba(0, 255, 120, 0.1);
+  max-width: 100%;
+  height: auto;
+}
+
+.contrato-submissao-zona {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Estiliza os botoes de acao de assinatura e envio de dados */
+#btn-limpar-traco,
+#btn-entrar-turnos {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 2px solid #ff3333;
+  color: #ff3333;
+  background-color: rgba(30, 0, 0, 0.7);
+  transition: all 0.3s ease;
+}
+
+#btn-limpar-traco {
+  margin-top: 15px;
+  width: 180px;
+  height: 38px;
+  font-size: 11px;
+}
+
+#btn-entrar-turnos {
+  width: 320px;
+  height: 60px;
+  font-size: 16px;
+  box-shadow: 0 0 10px rgba(255, 50, 50, 0.1);
+}
+
+#btn-limpar-traco:hover,
+#btn-entrar-turnos:hover {
+  background-color: #ff3333;
+  color: #000;
+  box-shadow: 0 0 10px #ff3333;
+}
+
+/* Evento mistério de escape */
+.wrapper-misterio {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modula a caixa flutuante do item final recolhido */
+#item-jornal-final {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 260px;
+  padding: 20px;
+  background: #e2d6b5;
+  color: #111;
+  border: 4px double #111;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.4;
+  cursor: pointer;
+  z-index: 100;
+  display: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#item-jornal-final:hover {
+  background: #d4c4a1;
+  transform: translate(-50%, -54%) scale(1.02);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 1);
+}
+
+#item-jornal-final span {
+  display: block;
+  font-size: 11px;
+  font-style: italic;
+  text-transform: uppercase;
+  margin-top: 8px;
+  border-top: 1px solid #111;
+  padding-top: 5px;
+  color: #333;
+}
+
+/* Atmosfera de Gameover */
+.game-over-bg {
+  background-color: #030000;
+  background-image: radial-gradient(rgba(30, 0, 0, 0.4) 50%, #000 100%);
+  font-family: "Courier New", Courier, monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Modula o painel central de logs de falha critica */
+.erro-card {
+  background: rgba(10, 0, 0, 0.85);
+  border: 2px solid #ff3333;
+  box-shadow: 0 0 30px rgba(255, 51, 51, 0.2);
+  padding: 50px;
+  max-width: 850px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  z-index: 20;
+}
+
+.erro-titulo {
+  color: #ff3333;
+  font-size: 32px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 25px;
+  text-shadow: 0 0 10px rgba(255, 51, 51, 0.6);
+  animation: piscarAlerta 0.6s infinite alternate;
+}
+
+.erro-detalhes {
+  color: #8a7a7a;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: left;
+  border-left: 3px solid #ff3333;
+  padding-left: 15px;
+  margin-bottom: 35px;
+}
+
+.ipb-carimbo {
+  color: rgba(255, 51, 51, 0.3);
+  font-size: 11px;
+  letter-spacing: 4px;
+  margin-top: 20px;
+  text-transform: uppercase;
+}
+
+.btn-gameover {
+  display: inline-block;
+  width: 250px;
+  margin: 10px auto 0 auto;
+}
+
+/* Alterna de forma suave a opacidade do aviso de erro ativo */
+@keyframes piscarAlerta {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Fundo especial para o menu principal */
+.menu-principal {
+  background-image:
+    linear-gradient(rgba(51, 24, 24, 0.7), rgba(47, 35, 35, 0.7)),
+    url("../images/cam05_artigos_com_monstro.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Jumpscare Overlay */
+#jumpscare-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 10000;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.jumpscare-imagem {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Classe para a imagem que está ativa no momento */
+.jumpscare-imagem.ativa {
+  display: block;
+  opacity: 1;
+}
+
+.jumpscare-imagem.inativa {
+  display: none;
+  opacity: 0;
+}
+
+/* Animação de tremor aplicada ao overlay */
+.tremer {
+  animation: jumpscareTremer 0.05s infinite;
+}
+
+@keyframes jumpscareTremer {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-8px, 6px);
+  }
+  50% {
+    transform: translate(8px, -6px);
+  }
+  75% {
+    transform: translate(-5px, -5px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
