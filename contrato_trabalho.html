@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Termo de Responsabilidade</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <div class="contentor-contrato">
+      <a
+        href="index.html"
+        class="btn-voltar-menu"
+        onclick="tocarSomVoltar(event)"
+      >
+        🚪 VOLTAR AO MENU
+      </a>
+
+      <div class="contrato-texto-bloco">
+        <h2 class="contrato-titulo-neon">TERMO DE ACEITAÇÃO OBRIGATÓRIO</h2>
+        <p class="contrato-paragrafo">
+          Ao clicar no botão abaixo, aceita o turno da noite de 7 horas. A
+          empresa não se responsabiliza por falhas de energia provocadas pelo
+          uso repetido de portas blindadas, lights ou manipulação excessiva do
+          monitor do mapa.
+        </p>
+      </div>
+
+      <div class="contrato-assinatura-bloco">
+        <div class="contrato-checkbox-painel">
+          <input type="checkbox" id="termoAceitacao" class="contrato-chk" />
+          <label for="termoAceitacao" class="contrato-chk-label">
+            DECLARO QUE LI, COMPREENDI E ACEITO TODAS AS CLÁUSULAS E TERMOS DE
+            CONFIDENCIALIDADE DESTE CONTRATO.
+          </label>
+        </div>
+
+        <div class="contrato-canvas-zona">
+          <p class="contrato-subtitulo">
+            ASSINATURA DO TRABALHADOR / OPERADOR:
+          </p>
+
+          <canvas id="telaAssinatura" width="500" height="150"></canvas>
+
+          <button
+            type="button"
+            id="btn-limpar-traco"
+            onclick="limparAssinaturaComSom()"
+          >
+            🗑️ LIMPAR TRAÇO
+          </button>
+        </div>
+      </div>
+
+      <div class="contrato-submissao-zona">
+        <button
+          type="button"
+          id="btn-entrar-turnos"
+          onclick="validarEEntrarComSom(event)"
+        >
+          ASSINAR E ENTRAR NO TURNO
+        </button>
+      </div>
+    </div>
+
+    <audio id="som-sucesso" src="audio/cam_click.mp3" preload="auto"></audio>
+    <audio id="som-erro" src="audio/Jumpscare.mp3" preload="auto"></audio>
+
+    <script>
+      // Audio
+      function tocarSomSucesso() {
+        let som = document.getElementById("som-sucesso");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio bloqueado"));
+        }
+      }
+
+      function tocarSomErro() {
+        let som = document.getElementById("som-erro");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.5;
+          som.play().catch((e) => console.log("Áudio de erro bloqueado"));
+        }
+      }
+
+      function tocarSomVoltar(event) {
+        event.preventDefault();
+        tocarSomSucesso();
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 100);
+      }
+
+      function mostrarAlertaAposSom(mensagem) {
+        tocarSomErro();
+        setTimeout(() => {
+          alert(mensagem);
+        }, 150);
+      }
+
+      // Assinatura digital
+      const canvas = document.getElementById("telaAssinatura");
+      const ctx = canvas.getContext("2d");
+      let desenhando = false;
+      let assinouAlgo = false;
+
+      // Configuração do canvas
+      ctx.strokeStyle = "#00ff78";
+      ctx.lineWidth = 3;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.shadowBlur = 4;
+      ctx.shadowColor = "#00ff78";
+
+      // Carregar assinatura salva anteriormente (se existir)
+      let assinaturaGuardada = localStorage.getItem("assinaturaSalva");
+      let contratoJaValidado = localStorage.getItem("contratoValidado");
+
+      if (assinaturaGuardada && contratoJaValidado === "true") {
+        let img = new Image();
+        img.src = assinaturaGuardada;
+        img.onload = function () {
+          ctx.drawImage(img, 0, 0);
+          assinouAlgo = true;
+          let chk = document.getElementById("termoAceitacao");
+          if (chk) chk.checked = true;
+        };
+      }
+
+      // Função para obter posição correta no canvas (mouse e toque)
+      function obterPosicao(evento) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        let clientX, clientY;
+
+        if (evento.touches) {
+          clientX = evento.touches[0].clientX;
+          clientY = evento.touches[0].clientY;
+        } else {
+          clientX = evento.clientX;
+          clientY = evento.clientY;
+        }
+
+        let x = (clientX - rect.left) * scaleX;
+        let y = (clientY - rect.top) * scaleY;
+
+        x = Math.max(0, Math.min(canvas.width, x));
+        y = Math.max(0, Math.min(canvas.height, y));
+
+        return { x, y };
+      }
+
+      // Eventos de desenho com mouse
+      canvas.addEventListener("mousedown", (e) => {
+        desenhando = true;
+        assinouAlgo = true;
+        const pos = obterPosicao(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        e.preventDefault();
+      });
+
+      canvas.addEventListener("mousemove", (e) => {
+        if (!desenhando) return;
+        const pos = obterPosicao(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        e.preventDefault();
+      });
+
+      canvas.addEventListener("mouseup", () => {
+        desenhando = false;
+      });
+
+      canvas.addEventListener("mouseleave", () => {
+        desenhando = false;
+      });
+
+      // Eventos de desenho com toque (mobile)
+      canvas.addEventListener("touchstart", (e) => {
+        desenhando = true;
+        assinouAlgo = true;
+        const pos = obterPosicao(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        e.preventDefault();
+      });
+
+      canvas.addEventListener("touchmove", (e) => {
+        if (!desenhando) return;
+        const pos = obterPosicao(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        e.preventDefault();
+      });
+
+      canvas.addEventListener("touchend", () => {
+        desenhando = false;
+      });
+
+      // Função para limpar a assinatura
+      function limparAssinatura() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        assinouAlgo = false;
+        localStorage.removeItem("assinaturaSalva");
+        localStorage.removeItem("contratoValidado");
+        document.getElementById("termoAceitacao").checked = false;
+        console.log("[SISTEMA] Assinatura limpa.");
+      }
+
+      // Função limpar com som
+      function limparAssinaturaComSom() {
+        tocarSomSucesso();
+        limparAssinatura();
+      }
+
+      // Função validar com som
+      function validarEEntrarComSom(event) {
+        let checkboxMarcar = document.getElementById("termoAceitacao").checked;
+
+        // Verificar se há alguma assinatura no canvas
+        let pixelData = ctx.getImageData(
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+        ).data;
+        let temAssinatura = false;
+        for (let i = 0; i < pixelData.length; i += 4) {
+          if (
+            pixelData[i] !== 0 ||
+            pixelData[i + 1] !== 0 ||
+            pixelData[i + 2] !== 0
+          ) {
+            temAssinatura = true;
+            break;
+          }
+        }
+
+        // Verificar erros - tocar som ANTES do alerta
+        if (!checkboxMarcar) {
+          mostrarAlertaAposSom(
+            "❌ OPERAÇÃO RECUSADA: Deves aceitar e marcar a caixa dos termos de confidencialidade da empresa antes de submeter.",
+          );
+          return;
+        }
+
+        if (!temAssinatura && !assinouAlgo) {
+          mostrarAlertaAposSom(
+            "❌ ASSINATURA EM FALTA: É obrigatório assinar digitalmente o painel do operador para autenticar o teu turno.",
+          );
+          return;
+        }
+
+        // Se passou nas validações, toca som de sucesso e redireciona
+        tocarSomSucesso();
+
+        setTimeout(() => {
+          let dadosDaAssinatura = canvas.toDataURL();
+          localStorage.setItem("assinaturaSalva", dadosDaAssinatura);
+          localStorage.setItem("contratoValidado", "true");
+          console.log(
+            "[SISTEMA] Contrato e assinatura arquivados com sucesso. A iniciar turno...",
+          );
+          window.location.href = "jogo.html";
+        }, 150);
+      }
+    </script>
+    <script src="js/menu-audio.js"></script>
+  </body>
+</html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Arquivo - Transcrição de Áudio</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <div class="fnaf-container terminal-ecran center-content">
+      <div
+        class="bloco-conteudo-centrado"
+        style="
+          width: 700px;
+          padding: 30px;
+          border: 2px solid #ff3333;
+          background: #000;
+          box-shadow: 0 0 15px rgba(255, 51, 51, 0.2);
+          text-align: left;
+          font-family: monospace;
+        "
+      >
+        <h2
+          style="
+            color: #ff3333;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 20px;
+          "
+        >
+          📟 REGISTO DE ÁUDIO #091 - TRANSCRIÇÃO
+        </h2>
+
+        <div style="line-height: 1.8; font-size: 15px; margin-bottom: 35px">
+          <p class="terminal-texto" style="color: #ff3333; margin-bottom: 15px">
+            <b>[03:14 AM]</b> - Ruído de interferência, sons grotescos e
+            estática de fundo.
+          </p>
+
+          <p class="terminal-texto" style="color: #00ff78">
+            <b>Voz do Operador:</b> "Eles estão a testar as nossas fraquezas...
+            Consigo monitorizar a assinatura deles no mapa através dos botões de
+            frequência analógica. Da CAM 01 saltou diretamente para o corredor
+            esquerdo da CAM 02. Se eu carregar no botão da luz e aquele ser
+            estiver lá... tranco os portas hidraúlicas imediatamente ou..."
+          </p>
+
+          <p class="terminal-texto" style="color: #ff3333; margin-top: 15px">
+            <b>[03:16 AM]</b> - Som estático elevado de alta frequência. Corte
+            repentino de sinal. Fim de transmissão.
+          </p>
+        </div>
+
+        <a
+          href="#"
+          class="btn-menu"
+          style="
+            border-color: #ff3333;
+            color: #ff3333;
+            width: 200px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 0 5px rgba(255, 51, 51, 0.1);
+          "
+          onclick="tocarSomVoltar(event)"
+          >RETROCEDER</a
+        >
+      </div>
+    </div>
+
+    <audio id="som-clique" src="audio/cam_click.mp3" preload="auto"></audio>
+
+    <script>
+      // Função para tocar som de voltar
+      function tocarSomVoltar(event) {
+        event.preventDefault();
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio bloqueado"));
+        }
+        setTimeout(() => {
+          window.location.href = "arquivo_geral.html";
+        }, 100);
+      }
+    </script>
+    <script src="js/menu-audio.js"></script>
+  </body>
+</html>

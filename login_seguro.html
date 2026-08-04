@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Terminal de Login</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+    <style>
+      .layout-split {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
+        width: 100%;
+        max-width: 1100px;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fnaf-container terminal-ecran center-content">
+      <div class="layout-split">
+        <div class="bloco-conteudo-centrado" style="flex: 1">
+          <p class="terminal-texto">
+            DI_OS v4.1 - SISTEMA DE ARQUIVOS PRIVADOS
+          </p>
+          <p class="terminal-texto" style="color: #ff3333">
+            REQUER CÓDIGO DE AUTENTICAÇÃO MILITAR:
+          </p>
+
+          <input
+            type="password"
+            id="codigoAcesso"
+            class="input-terminal"
+            placeholder="Introduza o código secreto..."
+            autofocus
+            onkeypress="verificarEnter(event)"
+          /><br />
+          <p
+            id="erro-login"
+            style="
+              color: #ff3333;
+              margin-bottom: 15px;
+              font-weight: bold;
+              display: none;
+            "
+          >
+            ❌ CÓDIGO INCORRETO. ACESSO NEGADO.
+          </p>
+
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 15px;
+              align-items: center;
+            "
+          >
+            <button
+              onclick="validarCodigoComSom()"
+              class="btn-menu verde"
+              style="width: 220px; margin: 0"
+            >
+              VALIDAR ACESSO
+            </button>
+            <a
+              href="#"
+              class="btn-menu"
+              style="
+                width: 220px;
+                margin: 0;
+                text-align: center;
+                display: block;
+                line-height: normal;
+              "
+              onclick="tocarSomVoltar(event)"
+              >VOLTAR AO MENU</a
+            >
+          </div>
+        </div>
+
+        <div
+          id="login-nota-drwilliams"
+          style="
+            display: none;
+            flex: 0.9;
+            background: #e2d6b5;
+            color: #111;
+            padding: 25px;
+            border: 4px double #111;
+            font-family: &quot;Times New Roman&quot;, serif;
+            box-shadow: 0 0 25px rgba(0, 255, 120, 0.1);
+            border-radius: 4px;
+            text-align: left;
+          "
+        >
+          <h4
+            style="
+              text-align: center;
+              border-bottom: 1px solid #111;
+              padding-bottom: 5px;
+              margin-bottom: 15px;
+              font-weight: bold;
+              color: #111;
+              font-size: 16px;
+            "
+          >
+            📝 RECONSTITUIÇÃO DA NOTA DO GABINETE
+          </h4>
+          <p
+            style="
+              font-style: italic;
+              line-height: 1.5;
+              font-size: 14px;
+              color: #111;
+            "
+          >
+            "Se estás a ler isto, significa que a contenção falhou. Bloqueia as
+            portas se a ouvires nos corredores laterais. Deixei os ficheiros de
+            investigação trancados no terminal central do menu. O código de
+            autenticação militar do bypass é <b>DI1993</b>. Não te esqueças."
+          </p>
+          <p
+            style="
+              text-align: right;
+              margin-top: 15px;
+              font-weight: bold;
+              color: #111;
+              font-size: 14px;
+            "
+          >
+            – Dr. Williams
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <audio id="som-sucesso" src="audio/cam_click.mp3" preload="auto"></audio>
+    <audio id="som-erro" src="audio/Jumpscare.mp3" preload="auto"></audio>
+
+    <script>
+      // Função para tocar som de sucesso
+      function tocarSomSucesso() {
+        let som = document.getElementById("som-sucesso");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio de sucesso bloqueado"));
+        }
+      }
+
+      // Função para tocar som de erro
+      function tocarSomErro() {
+        let som = document.getElementById("som-erro");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.5;
+          som.play().catch((e) => console.log("Áudio de erro bloqueado"));
+        }
+      }
+
+      function tocarSomVoltar(event) {
+        event.preventDefault();
+        tocarSomSucesso();
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 100);
+      }
+
+      // tecla Enter
+      function verificarEnter(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          validarCodigoComSom();
+        }
+      }
+
+      window.onload = function () {
+        let notaWilliamsLida = localStorage.getItem("notaWilliamsLida");
+        let blocoNota = document.getElementById("login-nota-drwilliams");
+
+        if (!blocoNota) return;
+
+        if (notaWilliamsLida === "true") {
+          blocoNota.removeAttribute("hidden");
+          blocoNota.style.setProperty("display", "block", "important");
+        } else {
+          blocoNota.setAttribute("hidden", "true");
+          blocoNota.style.setProperty("display", "none", "important");
+        }
+      };
+
+      function validarCodigo() {
+        let codigo = document.getElementById("codigoAcesso").value;
+        let erro = document.getElementById("erro-login");
+
+        if (codigo === "DI1993") {
+          localStorage.setItem("arquivosDesbloqueados", "true");
+          window.location.href = "arquivo_geral.html";
+        } else {
+          erro.style.display = "block";
+          document.getElementById("codigoAcesso").value = "";
+          setTimeout(() => {
+            erro.style.display = "none";
+          }, 3000);
+        }
+      }
+
+      function validarCodigoComSom() {
+        let codigo = document.getElementById("codigoAcesso").value;
+
+        if (codigo === "DI1993") {
+          tocarSomSucesso();
+          setTimeout(() => {
+            localStorage.setItem("arquivosDesbloqueados", "true");
+            window.location.href = "arquivo_geral.html";
+          }, 100);
+        } else {
+          tocarSomErro();
+
+          let erro = document.getElementById("erro-login");
+          erro.style.display = "block";
+          document.getElementById("codigoAcesso").value = "";
+
+          setTimeout(() => {
+            erro.style.display = "none";
+          }, 3000);
+        }
+      }
+    </script>
+    <script src="js/menu-audio.js"></script>
+  </body>
+</html>

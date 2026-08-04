@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Base de Dados de Segurança</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <script>
+      if (localStorage.getItem("arquivosDesbloqueados") !== "true") {
+        alert("Acesso Proibido!");
+        window.location.href = "login_seguro.html";
+      }
+    </script>
+
+    <div class="fnaf-container terminal-ecran center-content">
+      <div class="bloco-conteudo-centrado">
+        <h2 style="color: #00ff78; margin-bottom: 10px">
+          🗄️ ARQUIVO CENTRAL DE SEGURANÇA
+        </h2>
+        <p class="terminal-texto" style="color: #888">
+          Desbloqueia pastas encontrando cartões de acesso no monitor durante a
+          noite.
+        </p>
+        <br />
+
+        <div
+          style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 600px;
+            margin: 0 auto;
+          "
+        >
+          <a
+            href="#"
+            class="btn-menu"
+            onclick="tocarSomRedirecionar(event, 'noticia_jornal.html')"
+            >📄 Recortes de Jornal</a
+          >
+
+          <a
+            id="link-email"
+            href="#"
+            class="btn-menu"
+            onclick="
+              verificarEAcessar(event, 'pistaEmail', 'email_censurado.html')
+            "
+            >🔒 EMAILS DA I.P.B.</a
+          >
+
+          <a
+            id="link-audio"
+            href="#"
+            class="btn-menu"
+            onclick="
+              verificarEAcessar(event, 'pistaAudio', 'registo_audio.html')
+            "
+            >🔒 REGISTO DE ÁUDIO #091</a
+          >
+
+          <a
+            id="link-planta"
+            href="#"
+            class="btn-menu"
+            onclick="
+              verificarEAcessar(event, 'plantaEdificio', 'planta_edificio.html')
+            "
+            >🔒 PLANTA TÉCNICA</a
+          >
+        </div>
+        <br /><br />
+
+        <a
+          href="#"
+          class="btn-menu verde"
+          style="width: 200px; margin: 0 auto"
+          onclick="tocarSomVoltar(event)"
+          >VOLTAR</a
+        >
+      </div>
+    </div>
+
+    <audio id="som-clique" src="audio/cam_click.mp3" preload="auto"></audio>
+
+    <script>
+      // Função para tocar som
+      function tocarSom() {
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio bloqueado"));
+        }
+      }
+
+      // Função para tocar som e redirecionar
+      function tocarSomRedirecionar(event, destino) {
+        event.preventDefault();
+        tocarSom();
+        setTimeout(() => {
+          window.location.href = destino;
+        }, 100);
+      }
+
+      // Função para verificar chave, tocar som e acessar ou mostrar erro
+      function verificarEAcessar(event, chave, destino) {
+        event.preventDefault();
+        tocarSom();
+
+        setTimeout(() => {
+          if (localStorage.getItem(chave) === "true") {
+            window.location.href = destino;
+          } else {
+            alert(
+              "ERRO 403: Ficheiro encriptado. Encontra o cartão de acesso digital no monitor do jogo!",
+            );
+          }
+        }, 100);
+      }
+
+      // Função para tocar som e voltar ao menu
+      function tocarSomVoltar(event) {
+        event.preventDefault();
+        tocarSom();
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 100);
+      }
+
+      window.onload = function () {
+        // Atualiza textos dos botões
+        if (localStorage.getItem("pistaEmail") === "true") {
+          let btn = document.getElementById("link-email");
+          btn.innerText = "📄 EMAILS DA I.P.B.";
+        }
+        if (localStorage.getItem("pistaAudio") === "true") {
+          let btn = document.getElementById("link-audio");
+          btn.innerText = "📄 REGISTO DE ÁUDIO #091";
+        }
+        if (localStorage.getItem("plantaEdificio") === "true") {
+          let btn = document.getElementById("link-planta");
+          btn.innerText = "📄 PLANTA TÉCNICA";
+        }
+      };
+    </script>
+    <script src="js/menu-audio.js"></script>
+  </body>
+</html>

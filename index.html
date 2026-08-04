@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Entity Market | Menu Inicial</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <div class="fnaf-container center-content menu-principal">
+      <h1 class="menu-titulo">Entity Market</h1>
+      <div class="menu-botoes">
+        <a
+          href="login_seguro.html"
+          class="btn-menu verde"
+          onclick="tocarSomMenu(event)"
+          >ACEDER AOS ARQUIVOS</a
+        >
+
+        <button onclick="iniciarNovaNoite(event)" class="btn-menu">
+          INICIAR TURNO DA NOITE
+        </button>
+
+        <a href="ajuda.html" class="btn-menu" onclick="tocarSomMenu(event)"
+          >MANUAL DE AJUDA</a
+        >
+      </div>
+    </div>
+
+    <audio id="som-clique" src="audio/cam_click.mp3" preload="auto"></audio>
+
+    <script>
+      function tocarSomMenu(event) {
+        if (event && event.target.tagName === "A") {
+          event.preventDefault();
+        }
+
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio do menu bloqueado"));
+        }
+
+        if (event && event.target.tagName === "A") {
+          setTimeout(() => {
+            window.location.href = event.target.href;
+          }, 100);
+        }
+      }
+
+      console.log("[SISTEMA] Menu Principal carregado.");
+
+      localStorage.setItem("posicaoMonstro", "cam07_arrumos");
+
+      if (localStorage.getItem("chaveDesbloqueio") === "true") {
+        let avisoChave = document.getElementById("aviso-chave");
+        if (avisoChave) {
+          avisoChave.style.display = "block";
+        }
+      }
+
+      function iniciarNovaNoite(event) {
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio do menu bloqueado"));
+        }
+
+        console.log(
+          "[SISTEMA] Reset total efetuado. A apagar progresso da sessão anterior...",
+        );
+
+        localStorage.removeItem("menuAudioTempo");
+        sessionStorage.removeItem("sessao_em_curso");
+        localStorage.removeItem("notaWilliamsLida");
+        localStorage.removeItem("contratoValidado");
+        localStorage.removeItem("contratoValidated");
+
+        localStorage.removeItem("plantaEdificio");
+        localStorage.removeItem("jornalPagina1");
+        localStorage.removeItem("jornalPagina2");
+        localStorage.removeItem("pistaEmail");
+        localStorage.removeItem("pistaEmail2");
+        localStorage.removeItem("pistaAudio");
+        localStorage.removeItem("pistaEmailFinal");
+        localStorage.removeItem("jogoGanho");
+
+        setTimeout(() => {
+          window.location.href = "contrato_trabalho.html";
+        }, 100);
+      }
+    </script>
+    <script src="js/menu-audio.js"></script>
+  </body>
+</html>

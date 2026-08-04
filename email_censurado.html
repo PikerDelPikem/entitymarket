@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Arquivo - Correio Eletrónico</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <div class="fnaf-container terminal-ecran center-content">
+      <div
+        class="bloco-conteudo-centrado"
+        style="
+          width: 800px;
+          padding: 30px;
+          border: 2px solid #00ff78;
+          background: #000;
+          box-shadow: 0 0 15px rgba(0, 255, 120, 0.2);
+        "
+      >
+        <div
+          id="cabecalho-email"
+          style="
+            font-family: monospace;
+            text-align: left;
+            line-height: 1.8;
+            border-bottom: 1px dashed #00ff78;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+          "
+        ></div>
+
+        <div
+          id="corpo-email"
+          style="
+            font-family: monospace;
+            color: #00ff78;
+            text-align: justify;
+            font-size: 15px;
+            line-height: 1.6;
+            min-height: 200px;
+            margin-bottom: 30px;
+          "
+        ></div>
+
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(0, 255, 120, 0.3);
+            padding-top: 20px;
+            margin-bottom: 25px;
+          "
+        >
+          <button
+            id="btn-anterior"
+            onclick="
+              retrocederEmail();
+              tocarSomMenu();
+            "
+            class="btn-menu"
+            style="width: 140px; font-size: 13px; font-family: monospace"
+          >
+            ◀ ANTERIOR
+          </button>
+          <span
+            id="indicador-pagina"
+            style="color: #00ff78; font-family: monospace; font-size: 14px"
+            >E-mail 1 de 3</span
+          >
+          <button
+            id="btn-avancar"
+            onclick="
+              avancarEmail();
+              tocarSomMenu();
+            "
+            class="btn-menu"
+            style="width: 140px; font-size: 13px; font-family: monospace"
+          >
+            AVANÇAR ▶
+          </button>
+        </div>
+
+        <a
+          href="#"
+          class="btn-menu"
+          style="
+            width: 220px;
+            margin: 0 auto;
+            font-family: monospace;
+            text-align: center;
+          "
+          onclick="tocarSomVoltar(event)"
+          >SAIR DO TERMINAL</a
+        >
+      </div>
+    </div>
+
+    <audio id="som-clique" src="audio/cam_click.mp3" preload="auto"></audio>
+
+    <script>
+      // Função para tocar som do menu
+      function tocarSomMenu() {
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio bloqueado"));
+        }
+      }
+
+      // Função para tocar som de voltar
+      function tocarSomVoltar(event) {
+        event.preventDefault();
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio bloqueado"));
+        }
+        setTimeout(() => {
+          window.location.href = "arquivo_geral.html";
+        }, 100);
+      }
+
+      let emailAtual = 1;
+
+      const baseDadosEmails = {
+        1: {
+          de: "r.williams@ipb.foundation.org",
+          para: "frontline_division@meg.archive",
+          cc: "direcao_geral@ipb.restrito",
+          assunto: "RELATÓRIO DE CAMPO: Operação Supermercado Continental",
+          texto:
+            "Informo que a minha equipa de biólogos e engenheiros da I.P.B (Instituição de Pesquisa dos Backrooms) isolou com sucesso o perímetro do supermercado abandonado no centro da cidade. Como suspeitávamos, o noclip massivo detetado na semana passada abriu uma passagem direta e instável para o Nível 0 das Backrooms nas traseiras do armazém de stock, com ela apareceu uma criatura misteriosa capaz de se camuflar com o meio e produzir sons semelhantes aos de uma criança. O estabelecimento foi oficialmente fechado ao público sob o falso pretexto de 'inspeção sanitária grave'. Iniciámos a recolha de amostras do líquido que verte das paredes amarelas.",
+        },
+        2: {
+          de: "r.williams@ipb.foundation.org",
+          para: "frontline_division@meg.archive",
+          cc: "direcao_geral@ipb.restrito",
+          assunto: "URGENTE: Falha crítica de contenção / Baixas na equipa",
+          texto:
+            "A atmosfera deteriorou-se. As placas de Liga de Chumbo e Alumínio não estão a aguentar a assinatura magnética da fenda. Aquela coisa... aquela criatura grotesca de ossos, braços e unhas ascendeu do limbo a meio da madrugada. Ela move-se entre as divisões a uma velocidade incompreensível. Os meus biólogos foram encurralados na zona de artigos e a assinatura molecular deles foi simplesmente apagada da nossa realidade. Tranquei-me no gabinete administrativo central. Estou a tentar monitorizar os passos dela pelas câmaras analógicas para gerir as comportas hidráulicas. Enviem a equipa de extração militar imediatamente!",
+        },
+        3: {
+          de: "comando_central@ipb.restrito",
+          para: "r.williams@ipb.foundation.org",
+          cc: "arquivo_morto@meg.archive",
+          assunto: "TERMINAÇÃO DE PROTOCOLO: Transmissão Final",
+          texto:
+            "Doutor Williams, já não há equipa de extração para enviar. O supermercado colapsou por completo. O portal expandiu-se e as Backrooms começaram a passar permanentemente para o mundo real. O céu exterior perdeu a cor por completo e as paredes de betão da cidade estão a ser substituídas por aquele papel de parede amarelo húmido. O zumbido das luzes fluorescentes agora ecoa pelas ruas vazias lá fora. A entidade que dizimou a sua equipa original tomou o controlo total do complexo e a realidade como a conhecíamos deixou de existir. Não vale a pena tentar lutar, trancar-se ou resistir. O mundo foi consumido. Aquilo que está nos corredores já não quer apenas o seu turno... quer apagar a sua existência.",
+        },
+      };
+
+      window.onload = function () {
+        renderizarEmail(1);
+        atualizarCadeadosVisuais();
+      };
+
+      function renderizarEmail(id) {
+        const mail = baseDadosEmails[id];
+
+        document.getElementById("cabecalho-email").innerHTML = `
+                <span style="color: #00ff78;">DE:</span> ${mail.de}<br>
+                <span style="color: #00ff78;">PARA:</span> ${mail.para}<br>
+                <span style="color: #00ff78;">C.C.:</span> ${mail.cc}<br>
+                <span style="color: #00ff78;">ASSUNTO:</span> ${mail.assunto}
+            `;
+
+        document.getElementById("corpo-email").innerHTML = mail.texto;
+        document.getElementById("indicador-pagina").innerText =
+          `E-mail ${id} de 3`;
+        emailAtual = id;
+
+        atualizarCadeadosVisuais();
+      }
+
+      function avancarEmail() {
+        let proximo = emailAtual + 1;
+
+        if (proximo === 2) {
+          if (localStorage.getItem("pistaEmail2") !== "true") {
+            alert(
+              "❌ ERRO 403: Acesso Recusado. O E-mail #02 está encriptado. Explora as câmaras entre as 04:00 AM e as 05:00 AM para intercetar este ficheiro!",
+            );
+            return;
+          }
+        }
+        if (proximo === 3) {
+          if (localStorage.getItem("pistaEmailFinal") !== "true") {
+            alert(
+              "❌ ERRO 403: Acesso Recusado. A Diretiva Final está trancada na rede. Monitoriza o terminal central entre as 06:00 AM e as 07:00 AM!",
+            );
+            return;
+          }
+        }
+
+        if (proximo <= 3) {
+          renderizarEmail(proximo);
+        }
+      }
+
+      function retrocederEmail() {
+        let anterior = emailAtual - 1;
+
+        if (anterior === 1) {
+          renderizarEmail(anterior);
+        }
+        if (anterior === 2) {
+          if (localStorage.getItem("pistaEmail2") === "true") {
+            renderizarEmail(anterior);
+          }
+        }
+      }
+
+      function atualizarCadeadosVisuais() {
+        const btnAvancar = document.getElementById("btn-avancar");
+        const btnAnterior = document.getElementById("btn-anterior");
+
+        if (emailAtual === 1) {
+          if (localStorage.getItem("pistaEmail2") === "true") {
+            btnAvancar.innerText = "AVANÇAR ▶";
+          } else {
+            btnAvancar.innerText = "AVANÇAR (🔒)";
+          }
+          btnAnterior.style.opacity = "0.3";
+        } else if (emailAtual === 2) {
+          btnAnterior.style.opacity = "1";
+          if (localStorage.getItem("pistaEmailFinal") === "true") {
+            btnAvancar.innerText = "AVANÇAR ▶";
+          } else {
+            btnAvancar.innerText = "AVANÇAR (🔒)";
+          }
+        } else if (emailAtual === 3) {
+          btnAvancar.innerText = "AVANÇAR ▶";
+          btnAvancar.style.opacity = "0.3";
+        } else {
+          btnAvancar.style.opacity = "1";
+          btnAnterior.style.opacity = "1";
+        }
+      }
+    </script>
+    <script src="js/menu-audio.js"></script>
+  </body>
+</html>

@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nightwatch | Turno de Segurança</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <div class="fnaf-container">
+      <div class="hud-topo">
+        <div id="relogio">12:00 AM</div>
+        <div id="bateria">BATERIA: 100%</div>
+      </div>
+
+      <div id="vista-gabinete" class="sub-ecran">
+        <img
+          id="cenario-gabinete"
+          src="images/gabinete_base.png"
+          alt="Gabinete de Segurança"
+        />
+
+        <div class="controlos painel-esquerdo">
+          <button class="btn-porta" onclick="alternarPortaEsquerda()">
+            PORTA
+          </button>
+          <button
+            class="btn-luz"
+            onmouseover="acenderLuzEsquerda()"
+            onmouseout="apagarLuzes()"
+          >
+            LUZ
+          </button>
+          <button
+            onclick="voltarAoMenuPrincipalComSom()"
+            class="btn-voltar-menu"
+          >
+            🚪 Voltar ao Menu
+          </button>
+        </div>
+
+        <div class="controlos painel-direito">
+          <button class="btn-porta" onclick="alternarPortaDireita()">
+            PORTA
+          </button>
+          <button
+            class="btn-luz"
+            onmouseover="acenderLuzDireita()"
+            onmouseout="apagarLuzes()"
+          >
+            LUZ
+          </button>
+        </div>
+
+        <button
+          id="bilhete-secretaria"
+          onclick="abrirBilheteDrWilliamsComSom()"
+          style="
+            position: absolute;
+            bottom: 42%;
+            left: 40%;
+            width: 60px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px dashed #fff;
+            color: #ffffff;
+            cursor: pointer;
+            z-index: 10;
+          "
+        >
+          📝 NOTA
+        </button>
+
+        <div
+          id="pop-up-bilhete"
+          style="
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            background: #e2d6b5;
+            color: #111;
+            padding: 25px;
+            border: 4px double #111;
+            font-family: &quot;Times New Roman&quot;, serif;
+            z-index: 50;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+          "
+        >
+          <h4
+            style="
+              text-align: center;
+              border-bottom: 1px solid #111;
+              padding-bottom: 5px;
+              margin-bottom: 15px;
+              font-weight: bold;
+            "
+          >
+            NOTA DE EMERGÊNCIA
+          </h4>
+          <p style="font-style: italic; line-height: 1.5; font-size: 15px">
+            "Se estás a ler isto, significa que a contenção falhou. Bloqueia as
+            portas se a ouvires nos corredores laterais. Deixei os ficheiros de
+            investigação trancados no terminal central do menu. O código de
+            autenticação militar do bypass é <b>DI1993</b>. Não te esqueças."
+          </p>
+          <p style="text-align: right; margin-top: 15px; font-weight: bold">
+            – Dr. Williams
+          </p>
+          <br />
+          <button
+            onclick="fecharBilheteDrWilliams()"
+            style="
+              display: block;
+              margin: 0 auto;
+              padding: 5px 15px;
+              background: #111;
+              color: #fff;
+              border: none;
+              cursor: pointer;
+              font-weight: bold;
+            "
+          >
+            FECHAR
+          </button>
+        </div>
+
+        <button
+          class="aba-monitor-grande"
+          onclick="
+            abrirMonitor();
+            tocarSomMenu();
+          "
+        >
+          💻 ABRIR MONITOR DE SEGURANÇA
+        </button>
+      </div>
+
+      <div id="vista-monitor" class="sub-ecran" style="display: none">
+        <div class="ecran-camara-atual">
+          <div class="id-camara-texto">CAM 01 - CORREDOR ESQUERDO</div>
+
+          <div
+            class="feed-wrapper"
+            style="position: relative; width: 100%; height: 100%"
+          >
+            <img
+              id="imagem-monitor"
+              src="images/cam01_corredor_esquerdo_vazia.png"
+              alt="Feed de Vídeo"
+            />
+
+            <div class="estatica-efeito"></div>
+
+            <button
+              id="coletavel-planta"
+              class="objeto-cenario"
+              onclick="apanharColetavelComSom('plantaEdificio')"
+              style="
+                display: none;
+                top: 35%;
+                left: 30%;
+                border-color: #00ffff;
+                color: #00ffff;
+              "
+            >
+              🗺️ VER PLANTA
+            </button>
+
+            <button
+              id="coletavel-jornal1"
+              class="objeto-cenario"
+              onclick="apanharColetavelComSom('jornalPagina1')"
+              style="
+                display: none;
+                top: 55%;
+                left: 45%;
+                border-color: #e2d6b5;
+                color: #e2d6b5;
+              "
+            >
+              📰 JORNAL #1
+            </button>
+
+            <button
+              id="coletavel-jornal2"
+              class="objeto-cenario"
+              onclick="apanharColetavelComSom('jornalPagina2')"
+              style="
+                display: none;
+                top: 62%;
+                left: 50%;
+                border-color: #e2d6b5;
+                color: #e2d6b5;
+              "
+            >
+              📰 JORNAL #2
+            </button>
+
+            <button
+              id="coletavel-email1"
+              class="objeto-cenario"
+              onclick="apanharColetavelComSom('pistaEmail')"
+              style="
+                display: none;
+                top: 72%;
+                left: 25%;
+                border-color: #3399ff;
+                color: #3399ff;
+              "
+            >
+              💾 ARQUIVO_1.EML
+            </button>
+
+            <button
+              id="coletavel-email2"
+              class="objeto-cenario"
+              onclick="apanharColetavelComSom('pistaEmail2')"
+              style="
+                display: none;
+                top: 20%;
+                left: 65%;
+                border-color: #3399ff;
+                color: #3399ff;
+              "
+            >
+              💾 ARQUIVO_2.EML
+            </button>
+
+            <button
+              id="coletavel-audio"
+              class="objeto-cenario"
+              onclick="apanharColetavelComSom('pistaAudio')"
+              style="
+                display: none;
+                top: 45%;
+                left: 75%;
+                border-color: #00ff78;
+                color: #00ff78;
+              "
+            >
+              📟 GRAVAÇÃO_AUDIO
+            </button>
+
+            <button
+              id="coletavel-email-final"
+              class="objeto-cenario"
+              onclick="apanharColetavelComSom('pistaEmailFinal')"
+              style="
+                display: none;
+                top: 80%;
+                left: 55%;
+                border-color: #ff3333;
+                color: #ff3333;
+                box-shadow: 0 0 10px #ff3333;
+              "
+            >
+              🚨 ALERTA_FINAL.EML
+            </button>
+          </div>
+        </div>
+
+        <div class="contentor-mapa-direito">
+          <div class="mapa-wrapper">
+            <img
+              src="images/MapaCamaras.png"
+              class="img-mapa-linhas mapa-transparent"
+              alt="Planta do Edifício"
+            />
+
+            <button
+              class="btn-cam-mapa cam-topo"
+              onclick="mudarParaCamara('cam07_arrumos')"
+            >
+              CAM 07
+            </button>
+            <button
+              class="btn-cam-mapa cam-sala-grande-sup"
+              onclick="mudarParaCamara('cam06_caixas')"
+            >
+              CAM 06
+            </button>
+            <button
+              class="btn-cam-mapa cam-sala-grande-inf"
+              onclick="mudarParaCamara('cam05_artigos')"
+            >
+              CAM 05
+            </button>
+            <button
+              class="btn-cam-mapa cam-sala-esquerda"
+              onclick="mudarParaCamara('cam03_limpeza')"
+            >
+              CAM 03
+            </button>
+            <button
+              class="btn-cam-mapa cam-corredor-esquerdo"
+              onclick="mudarParaCamara('cam01_corredor_esquerdo')"
+            >
+              CAM 01
+            </button>
+            <button
+              class="btn-cam-mapa cam-corredor-direito"
+              onclick="mudarParaCamara('cam02_corredor_direito')"
+            >
+              CAM 02
+            </button>
+            <button
+              class="btn-cam-mapa cam-sala-direita"
+              onclick="mudarParaCamara('cam04_casa_de_banho')"
+            >
+              CAM 04
+            </button>
+          </div>
+        </div>
+
+        <button
+          class="fechar-camaras"
+          onclick="
+            tocarSomFecharMonitor();
+            fecharMonitor();
+          "
+        >
+          ▼ FECHAR MONITOR (VOLTAR AO GABINETE) ▼
+        </button>
+      </div>
+    </div>
+
+    <div id="jumpscare-overlay">
+      <img
+        id="jumpscare-img1"
+        src="images/jumpscare_FLICKER.png"
+        class="jumpscare-imagem"
+        alt="JUMPSCARE"
+      />
+      <img
+        id="jumpscare-img2"
+        src="images/jumpscare_OG.png"
+        class="jumpscare-imagem"
+        alt="JUMPSCARE"
+      />
+    </div>
+
+    <audio id="som-porta" src="audio/doors.mp3" preload="auto"></audio>
+    <audio id="som-luz" src="audio/lights.mp3" preload="auto"></audio>
+    <audio
+      id="som-entidade-1"
+      src="audio/CanYouSeeMe.mp3"
+      preload="auto"
+    ></audio>
+    <audio id="som-entidade-2" src="audio/Hello.mp3" preload="auto"></audio>
+    <audio id="som-entidade-3" src="audio/ImHere.mp3" preload="auto"></audio>
+    <audio
+      id="som-tema-principal"
+      src="audio/BackroomsAmbience1.mp3"
+      preload="auto"
+      loop
+    ></audio>
+    <audio
+      id="som-monstro-porta-esq"
+      src="audio/Jumpscare.mp3"
+      preload="auto"
+    ></audio>
+    <audio
+      id="som-monstro-porta-dir"
+      src="audio/Jumpscare.mp3"
+      preload="auto"
+    ></audio>
+    <audio id="som-monitor" src="audio/Monitor.mp3" preload="auto"></audio>
+    <audio
+      id="som-fechar-monitor"
+      src="audio/FecharMonitor.mp3"
+      preload="auto"
+    ></audio>
+
+    <audio id="som-clique" src="audio/cam_click.mp3" preload="auto"></audio>
+    <audio id="som-coletavel" src="audio/collected.mp3" preload="auto"></audio>
+
+    <script>
+      // Função para tocar o som de clique
+      function tocarSomMenu() {
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio do menu bloqueado"));
+        }
+      }
+
+      // Função para tocar o som de coletável
+      function tocarSomColetavel() {
+        let som = document.getElementById("som-coletavel");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio do coletável bloqueado"));
+        }
+      }
+
+      // Função para tocar o som de fechar monitor
+      function tocarSomFecharMonitor() {
+        let som = document.getElementById("som-fechar-monitor");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 1;
+          som
+            .play()
+            .catch((e) => console.log("Áudio de fechar monitor bloqueado"));
+        }
+      }
+
+      // Abrir bilhete com som de coletável
+      function abrirBilheteDrWilliamsComSom() {
+        tocarSomColetavel();
+        setTimeout(() => {
+          abrirBilheteDrWilliams();
+        }, 50);
+      }
+
+      // Voltar ao menu com som
+      function voltarAoMenuPrincipalComSom() {
+        tocarSomMenu();
+        setTimeout(() => {
+          localStorage.removeItem("posicaoMonstro");
+          window.location.href = "index.html";
+        }, 100);
+      }
+
+      // Apanhar coletável com som
+      function apanharColetavelComSom(chavePista) {
+        tocarSomColetavel();
+        setTimeout(() => {
+          apanharColetavel(chavePista);
+        }, 50);
+      }
+    </script>
+    <script src="js/script.js"></script>
+  </body>
+</html>

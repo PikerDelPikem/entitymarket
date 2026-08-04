@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DI_OS | CONEXÃO CORROMPIDA</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body class="game-over-bg">
+    <div class="estatica-efeito" style="opacity: 0.4; z-index: 10"></div>
+
+    <div class="erro-card">
+      <div class="erro-titulo">⚠️ ALERTA DE SINAL CRÍTICO ⚠️</div>
+
+      <div class="erro-detalhes">
+        <p><b>LOG_SISTEMA:</b> DI_OS v4.1 // CRASH_DETECTED</p>
+        <p><b>LOCALIZAÇÃO:</b> Supermercado Continental - Gabinete Central</p>
+        <p>
+          <b>ESTADO DO OPERADOR:</b>
+          <span style="color: #ff3333; font-weight: bold"
+            >SINAIS VITAIS INTERROMPIDOS</span
+          >
+        </p>
+        <br />
+        <p style="color: #bbb">
+          "A entidade expandiu-se além do isolamento de chumbo. Registada
+          descarga quântica massiva de estática no terminal de segurança. O
+          complexo foi completamente selado pela diretiva de contenção da
+          I.P.B."
+        </p>
+      </div>
+
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+          align-items: center;
+        "
+      >
+        <a
+          href="#"
+          class="btn-menu btn-gameover"
+          style="border-color: #ff3333; color: #ff3333"
+          onclick="tocarSomJogo(event)"
+          >TENTAR NOVAMENTE</a
+        >
+        <a
+          href="#"
+          class="btn-menu verde btn-gameover"
+          onclick="tocarSomMenu(event)"
+          >VOLTAR AO MENU</a
+        >
+      </div>
+
+      <div class="ipb-carimbo">
+        Propriedade Confidencial // I.P.B. Divisão de Contenção
+      </div>
+    </div>
+
+    <audio id="som-clique" src="audio/cam_click.mp3" preload="auto"></audio>
+
+    <script>
+      // Função para tocar som e ir para o jogo
+      function tocarSomJogo(event) {
+        event.preventDefault();
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio bloqueado"));
+        }
+        setTimeout(() => {
+          window.location.href = "jogo.html";
+        }, 100);
+      }
+
+      // Função para tocar som e voltar ao menu
+      function tocarSomMenu(event) {
+        event.preventDefault();
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio bloqueado"));
+        }
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 100);
+      }
+    </script>
+    <script src="js/menu-audio.js"></script>
+  </body>
+</html>

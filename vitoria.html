@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <title>06:00 AM - Sobreviveste</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <div
+      class="fnaf-container center-content"
+      style="
+        background-image: url(&quot;images/vitoria_background.png&quot;);
+        background-size: cover;
+      "
+    >
+      <h1
+        style="
+          font-size: 80px;
+          color: #00ff78;
+          font-family: monospace;
+          text-shadow: 0 0 20px #00ff78;
+        "
+      >
+        07:00 AM
+      </h1>
+      <h2 style="margin: 20px 0">TURNO DA NOITE CONCLUÍDO</h2>
+      <a href="#" class="btn-menu verde" onclick="tocarSomClique(event)"
+        >RECOLHER SUBSÍDIO</a
+      >
+    </div>
+
+    <audio id="som-clique" src="audio/collected.mp3" preload="auto"></audio>
+
+    <script>
+      function tocarSomClique(event) {
+        event.preventDefault();
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.5;
+
+          // Aguarda o som terminar de tocar antes de redirecionar
+          let duracaoSom = 0;
+
+          // Tenta obter a duração do som
+          if (som.duration && !isNaN(som.duration)) {
+            duracaoSom = som.duration * 1000;
+          } else {
+            duracaoSom = 800;
+          }
+
+          som.play().catch((e) => console.log("Áudio bloqueado"));
+
+          setTimeout(() => {
+            window.location.href = "escape.html";
+          }, duracaoSom + 50);
+        } else {
+          setTimeout(() => {
+            window.location.href = "escape.html";
+          }, 20);
+        }
+      }
+    </script>
+    <script src="js/menu-audio.js"></script>
+  </body>
+</html>

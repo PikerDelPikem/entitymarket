@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Arquivo - Diário Nacional</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+    <style>
+      .jornal-ecran {
+        background: #e2d6b5 !important;
+        color: #111111 !important;
+        font-family: "Times New Roman", Times, serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .jornal-ecran .bloco-conteudo-centrado {
+        max-width: 800px;
+        width: 90%;
+        color: #111111 !important;
+        margin: 0 auto;
+      }
+
+      .jornal-titulo {
+        font-size: 42px;
+        color: #111111 !important;
+        text-align: center;
+        border-bottom: 4px double #111111;
+        margin-bottom: 20px;
+        font-weight: bold;
+        font-family: "Times New Roman", Times, serif;
+        text-shadow: none !important;
+      }
+
+      .jornal-ecran .btn-menu {
+        background: rgba(0, 0, 0, 0.05) !important;
+        border: 2px solid #111111 !important;
+        color: #111111 !important;
+        font-family: "Times New Roman", Times, serif;
+        transition: all 0.2s ease;
+        text-shadow: none !important;
+      }
+
+      .jornal-ecran .btn-menu:hover {
+        background: #111111 !important;
+        color: #e2d6b5 !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fnaf-container jornal-ecran center-content">
+      <div class="bloco-conteudo-centrado" style="color: #111">
+        <div class="jornal-titulo">Recorte de Jornal</div>
+
+        <div
+          id="conteudo-jornal"
+          style="
+            min-height: 280px;
+            text-align: justify;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-family: &quot;Times New Roman&quot;, Times, serif;
+          "
+        ></div>
+
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            max-width: 420px;
+            margin: 0 auto 20px auto;
+            gap: 10px;
+          "
+        >
+          <button
+            id="btn-p1"
+            onclick="
+              mudarPaginaJornal(1);
+              tocarSomMenu();
+            "
+            class="btn-menu"
+            style="
+              border-color: #111;
+              color: #111;
+              width: 130px;
+              padding: 5px;
+              font-size: 13px;
+              font-weight: bold;
+            "
+          >
+            Pág. 1 (🔒)
+          </button>
+          <button
+            id="btn-p2"
+            onclick="
+              mudarPaginaJornal(2);
+              tocarSomMenu();
+            "
+            class="btn-menu"
+            style="
+              border-color: #111;
+              color: #111;
+              width: 130px;
+              padding: 5px;
+              font-size: 13px;
+              font-weight: bold;
+            "
+          >
+            Pág. 2 (🔒)
+          </button>
+          <button
+            id="btn-p3"
+            onclick="
+              mudarPaginaJornal(3);
+              tocarSomMenu();
+            "
+            class="btn-menu"
+            style="
+              border-color: #111;
+              color: #111;
+              width: 130px;
+              padding: 5px;
+              font-size: 13px;
+              font-weight: bold;
+            "
+          >
+            Pág. 3
+          </button>
+        </div>
+
+        <a
+          href="#"
+          class="btn-menu"
+          style="
+            border-color: #111;
+            color: #111;
+            font-family: sans-serif;
+            margin: 0 auto;
+          "
+          onclick="tocarSomVoltar(event)"
+          >FECHAR</a
+        >
+      </div>
+    </div>
+
+    <audio id="som-clique" src="audio/cam_click.mp3" preload="auto"></audio>
+
+    <script>
+      // Função para tocar som do menu
+      function tocarSomMenu() {
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio bloqueado"));
+        }
+      }
+
+      // Função para tocar som de voltar
+      function tocarSomVoltar(event) {
+        event.preventDefault();
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio bloqueado"));
+        }
+        setTimeout(() => {
+          window.location.href = "arquivo_geral.html";
+        }, 100);
+      }
+
+      const paginasJornal = {
+        1: "<b>[RECORTE RECUPERADO NAS CÂMARAS — 01:00 AM]</b><br><i>DIÁRIO DE PORTUGAL — EDIÇÃO DE OUTONO (1993)</i><br><br><b>MISTÉRIO NO SUPERMERCADO CONTINENTAL: FUNCIONÁRIOS DESAPARECEM SEM DEIXAR RASTRO</b><br><br>O desaparecimento inexplicável de quatro funcionários no Supermercado Continental está a intrigar as autoridades locais. Segundo relatos recolhidos pela nossa redação, os incidentes começaram semanas após a contratação repentina de um novo repositor noturno, identificado apenas como Benson — descrito pelos colegas como um homem de semblante cinzento e 'olhar permanentemente fixo no vazio'.<br><br>Durante os turnos da madrugada, paletes inteiras de stock começaram a ser substituídas por caixas sem marca e latas misteriosas cheias de um líquido amargo não identificado. Pouco tempo depois, o fenómeno escalou para os trabalhadores. Testemunhas afirmam que os operadores simplesmente desapareciam a meio dos corredores durante a reposição. No chão, eram encontradas apenas as fardas da empresa, intactas e dobradas, como se os corpos tivessem sido evaporados de um segundo para o outro. O estabelecimento foi evacuado ontem à noite e a polícia local já tomou o controlo do edifício para iniciar as investigações no armazém central.",
+        2: "<b>[RECORTE RECUPERADO NAS CÂMARAS — 02:00 AM]</b><br><i>CORREIO DA NOITE — EDIÇÃO EXTRAORDINÁRIA</i><br><br><b>FORÇAS MILITARES ISOLAM A CIDADE: GOVERNO ACIONA PROTOCOLO DE EMERGÊNCIA SECRETO</b><br><br>O que começou por ser um caso de desaparecimentos num supermercado local evoluiu para uma crisis de segurança nacional sem precedentes. Fontes anónimas confirmam que dois agentes da polícia que entraram no armazém do Supermercado Continental desapareceram após 'atravessarem' visualmente um quadrado plano de cor amarelada cravado no betão, num fenómeno descrito por cientistas civis como noclip (perda de colisão com a realidade).<br><br>O Governo Central emitiu uma ordem de isolamento absoluto de todo o perímetro urbano. Linhas de comboio foram cortadas e barreiras foram erguidas nas estradas principais. Rumores apontam para a chegada iminente de uma organização científica internacional de elite, apelidada de M.E.G. (Major Explorer Group) e da sua divisão laboratorial, a I.P.B., para assumir o controlo das investigações. O porta-voz do governo recusou-se a prestar declarações, mas confirmou que a intervenção visa conter uma 'anomalia física estrutural instável' que ameaça expandir-se para além dos limites do complexo comercial.",
+        3: "<b>[ARQUIVO PÚBLICO — TRANSMISSÃO INTERROMPIDA — RECONSTITUIÇÃO DO IMPACTO GLOBAL]</b><br><br><b>PROTOCOLO DE ANIQUILAÇÃO: A REALIDADE FOI SUBVERTIDA</b><br><br>O Ministério da Defesa emitiu o último comunicado em sinal aberto antes da quebra total das infraestruturas. Não há mais zonas de evacuação. O colapso do espaço físico é absoluto e irreversível. Foram reportadas centenas de fraturas moleculares massivas em todas as grandes cidades. Testemunhas descrevem bairros inteiros a serem 'engolidos' por paredes amarelas e corredores infinitos que nascem do alcatrão em frações de segundo.<br><br>O pânico civil deu lugar a um silêncio catatónico. Qualquer colisão descuidada contra uma superfície sólida resulta no noclip imediato — famílias inteiras evaporam-se a meio de conversas dentro das suas próprias casas. Mas o verdadeiro horror reside nos sobreviventes: aqueles que ainda não caíram no abismo perderam completamente a sanidade. Relatos desesperados confirmam que a população sobrevivente já não consegue distinguir a realidade das ilusões projetadas pelas Backrooms. As pessoas caminham em transe em direção às paredes, perseguindo vozes de entes queridos já desaparecidos ou conversando com sombras deformadas que se arrastam pelos cantos dos olhos.<br><br>A arquitetura do mundo está a derreter. O céu exterior perdeu o ciclo solar e permanece num tom cinzento-estático de televisão sem sinal. O zumbido elétrico de alta frequência já não vem das lâmpadas... ele ecoa diretamente de dentro da cabeça de cada ser humano vivo. Se alguém estiver a ler isto, não confies no que vês, não confies nos teus próprios sentidos. A realidade foi consumida. Nós perdemos.",
+      };
+
+      window.onload = function () {
+        if (localStorage.getItem("jornalPagina1") === "true") {
+          document.getElementById("btn-p1").innerText = "Pág. 1";
+        }
+        if (localStorage.getItem("jornalPagina2") === "true") {
+          document.getElementById("btn-p2").innerText = "Pág. 2";
+        }
+        if (localStorage.getItem("jogoGanho") === "true") {
+          document.getElementById("btn-p3").innerText = "Pág. 3";
+        } else {
+          document.getElementById("btn-p3").innerText = "Pág. 3 (🔒)";
+        }
+
+        if (localStorage.getItem("jornalPagina1") === "true") {
+          mudarPaginaJornal(1);
+        } else if (localStorage.getItem("jornalPagina2") === "true") {
+          mudarPaginaJornal(2);
+        } else {
+          document.getElementById("conteudo-jornal").innerHTML =
+            "<b>[SISTEMA DE ARQUIVOS]</b><br><br>Nenhum fragmento de jornal recuperado nesta sessão. Sobrevive e explora as câmaras analógicas para descarregar dados.";
+        }
+      };
+
+      function mudarPaginaJornal(num) {
+        if (num === 1 && localStorage.getItem("jornalPagina1") !== "true") {
+          alert(
+            "❌ FICHEIRO EM FALTA: Este fragmento ainda não foi recuperado (01:00 AM - 02:00 AM).",
+          );
+          return;
+        }
+        if (num === 2 && localStorage.getItem("jornalPagina2") !== "true") {
+          alert(
+            "❌ FICHEIRO EM FALTA: Este fragmento ainda não foi recuperado (02:00 AM - 03:00 AM).",
+          );
+          return;
+        }
+        if (num === 3 && localStorage.getItem("jogoGanho") !== "true") {
+          alert(
+            "❌ ACESSO NEGADO: Este arquivo está corrompido e encriptado. Requer a conclusão com sucesso do Turno da Noite de 7 Horas.",
+          );
+          return;
+        }
+
+        document.getElementById("conteudo-jornal").innerHTML =
+          paginasJornal[num];
+      }
+    </script>
+    <script src="js/menu-audio.js"></script>
+  </body>
+</html>

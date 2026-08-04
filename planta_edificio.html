@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Arquivo - Planta Técnica</title>
+    <link rel="stylesheet" href="css/estilos.css" />
+  </head>
+  <body>
+    <div class="fnaf-container center-content">
+      <h3 style="color: #00ff78; font-family: monospace; margin-bottom: 20px">
+        DIAGRAMA DA PLANTA DAS CÂMARAS
+      </h3>
+      <img
+        src="images/MapaCamarasDetalhe.png"
+        alt="Planta"
+        style="max-height: 70%; border: 2px dashed #00ff78; padding: 10px"
+      />
+      <br />
+      <a href="#" class="btn-menu verde" onclick="tocarSomVoltar(event)"
+        >FECHAR DIAGRAMA</a
+      >
+    </div>
+
+    <audio id="som-clique" src="audio/cam_click.mp3" preload="auto"></audio>
+
+    <script>
+      // Função para tocar som de voltar
+      function tocarSomVoltar(event) {
+        event.preventDefault();
+        let som = document.getElementById("som-clique");
+        if (som) {
+          som.currentTime = 0;
+          som.volume = 0.3;
+          som.play().catch((e) => console.log("Áudio bloqueado"));
+        }
+        setTimeout(() => {
+          window.location.href = "arquivo_geral.html";
+        }, 100);
+      }
+    </script>
+    <script src="js/menu-audio.js"></script>
+  </body>
+</html>
